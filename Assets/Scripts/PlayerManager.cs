@@ -17,6 +17,8 @@ public class PlayerManager : MonoBehaviour
     public float iframes = .5f;
     private float spawnBlockingRadius = 15;
 
+    private bool movementEnabled = true;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -76,10 +78,17 @@ public class PlayerManager : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (!movementEnabled)
+            return;
+
         body.position = body.position + (move * maxVelocity);
 
         Vector2 lookDir = mousePos - body.position;
         float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
         body.rotation = angle;
     }
+
+    public bool EnableMovement() => movementEnabled = true;
+
+    public bool DisableMovement() => movementEnabled = false;
 }
