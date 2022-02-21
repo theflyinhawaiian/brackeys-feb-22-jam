@@ -52,8 +52,6 @@ public class GameManager : MonoBehaviour, ICameraMoveListener
             }
 
             cameraManager.MoveToRoom(camX * xOffset, camY * yOffset);
-            //AdjustBackgrounds();
-            player.DisableMovement();
         }
     }
 
@@ -88,8 +86,5 @@ public class GameManager : MonoBehaviour, ICameraMoveListener
 
     public void OnCameraStartMoving() {}
 
-    public void OnCameraStopMoving()
-    {
-        player.EnableMovement();
-    }
+    public void OnCameraStopMoving() {}
 }

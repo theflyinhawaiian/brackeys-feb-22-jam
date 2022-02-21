@@ -23,7 +23,7 @@ public class CameraManager : MonoBehaviour
         if (!isMoving)
             return;
 
-        var move = Vector3.MoveTowards(mainCamera.transform.position, target, maxVelocity * Time.deltaTime);
+        var move = Vector3.Lerp(mainCamera.transform.position, target, maxVelocity * Time.deltaTime);
 
         if (move != target)
         {
