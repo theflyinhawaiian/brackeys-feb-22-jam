@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Assets.Scripts;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -15,7 +16,9 @@ public class PlayerManager : MonoBehaviour
 
     public float currentTime = -1000f;
     public float iframes = .5f;
-    private float spawnBlockingRadius = 15;
+
+    private HealthSystem healthSystem;
+    private EquipmentSystem equipmentSystem;
 
     private bool movementEnabled = true;
 
@@ -23,6 +26,9 @@ public class PlayerManager : MonoBehaviour
     void Start()
     {
         body = GetComponent<Rigidbody2D>();
+
+        healthSystem = new HealthSystem(100);
+        equipmentSystem = new EquipmentSystem(transform);
 
         // Things we'll re-implement as the need arises
         /*
@@ -45,8 +51,14 @@ public class PlayerManager : MonoBehaviour
 
         if (Input.GetButton("Fire1"))
         {
+            equipmentSystem.TryUseActiveItem();
             // Activating selected item
             //ProcessAction(activeItem);
+        }
+
+        if(Input.mouseScrollDelta.y != 0)
+        {
+            Debug.Log($"Mouse Scrolled! {Input.mouseScrollDelta.y}");
         }
 
         // Arming inventory items

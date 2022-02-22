@@ -46,7 +46,6 @@ public class BaseEnemyController : MonoBehaviour
         if (collision.gameObject.CompareTag("Bullet"))
         {
             EnemyHealth.Damage(1);
-            Debug.Log("Health: " + EnemyHealth.GetHealth());
 
             if (EnemyHealth.GetHealth() == 0)
             {
