@@ -1,9 +1,10 @@
+using Assets.Scripts;
 using Assets.Scripts.Enemies;
 using UnityEngine;
 
 public class BaseEnemyController : MonoBehaviour, IEnemy
 {
-    public float maxVelocity = 5;
+    public float maxVelocity = 0.05f;
     public float changeTargetInterval = 1.5f;
 
     private Rigidbody2D body;
@@ -11,6 +12,7 @@ public class BaseEnemyController : MonoBehaviour, IEnemy
 
     private Vector3 target;
     private float lastTargetChangeTime;
+    private bool needsTarget = true;
 
     public delegate void EnemyDeath();
     public event EnemyDeath OnDeath;
@@ -26,26 +28,28 @@ public class BaseEnemyController : MonoBehaviour, IEnemy
         EnemyHealth = new HealthSystem(5);
 
         lastTargetChangeTime = Time.time;
-        target = GenerateNewTarget();
     }
 
     private void Update()
     {
-        if(Time.time - lastTargetChangeTime > changeTargetInterval)
+        if(needsTarget || Time.time - lastTargetChangeTime > changeTargetInterval)
         {
             target = GenerateNewTarget();
             lastTargetChangeTime = Time.time;
+            needsTarget = false;
         }
     }
 
-    Vector3 GenerateNewTarget() => Random.insideUnitCircle * 5;
+    Vector3 GenerateNewTarget()
+    {
+        var rand = Random.insideUnitSphere.normalized * 5;
+        rand.z = Constants.EntityZValue;
+        return rand.normalized;
+    }
 
     void FixedUpdate()
     {
-        var diff = transform.position - target;
-        var moveDirection = new Vector2(diff.x, diff.y);
-
-        body.position = body.position - moveDirection.normalized * maxVelocity;
+        body.position += (Vector2)target.normalized * maxVelocity;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
