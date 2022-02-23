@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Assets.Scripts;
+using Assets.Scripts.Weapons;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -28,7 +29,10 @@ public class PlayerManager : MonoBehaviour
         body = GetComponent<Rigidbody2D>();
 
         healthSystem = new HealthSystem(100);
+
         equipmentSystem = new EquipmentSystem(transform);
+        equipmentSystem.Weapons.Add(new SimpleProjectileWeapon());
+        equipmentSystem.Weapons.Add(new HitscanWeapon());
 
         // Things we'll re-implement as the need arises
         /*
@@ -56,9 +60,12 @@ public class PlayerManager : MonoBehaviour
             //ProcessAction(activeItem);
         }
 
-        if(Input.mouseScrollDelta.y != 0)
+        if(Input.mouseScrollDelta.y == -1)
         {
-            Debug.Log($"Mouse Scrolled! {Input.mouseScrollDelta.y}");
+            equipmentSystem.CycleSelectedWeaponBackward();
+        }else if(Input.mouseScrollDelta.y == 1)
+        {
+            equipmentSystem.CycleSelectedWeaponForward();
         }
 
         // Arming inventory items
