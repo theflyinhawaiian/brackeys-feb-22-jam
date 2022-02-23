@@ -12,8 +12,10 @@ public class GameManager : MonoBehaviour, ICameraMoveListener
     public CameraManager cameraManager;
     public Transform[] rooms;
 
+    private RoomManager roomGenerator;
+
     private float xOffset, yOffset;
-    private int camX, camY;
+    private int roomX, roomY;
 
     void Start()
     {
@@ -22,8 +24,10 @@ public class GameManager : MonoBehaviour, ICameraMoveListener
         xOffset = rooms[0].transform.localScale.x;
         yOffset = rooms[0].transform.localScale.y;
 
-        camX = 0;
-        camY = 0;
+        roomGenerator = new RoomManager(player.transform, xOffset, yOffset, 5);
+
+        roomX = 0;
+        roomY = 0;
     }
 
     // Update is called once per frame
@@ -33,36 +37,30 @@ public class GameManager : MonoBehaviour, ICameraMoveListener
         {
             var direction = GetPositionalRelationship(player.transform.position, cameraManager.transform.position);
 
+            var prevX = roomX;
+            var prevY = roomY;
+
             switch (direction)
             {
                 case Direction.Up:
-                    camY++;
+                    roomY++;
                     break;
                 case Direction.Down:
-                    camY--;
+                    roomY--;
                     break;
                 case Direction.Right:
-                    camX++;
+                    roomX++;
                     break;
                 case Direction.Left:
-                    camX--;
+                    roomX--;
                     break;
                 default:
                     return;
             }
 
-            cameraManager.MoveToRoom(camX * xOffset, camY * yOffset);
+            roomGenerator.ActivateRoom(prevX, prevY, roomX, roomY);
+            cameraManager.MoveToRoom(roomX * xOffset, roomY * yOffset);
         }
-    }
-
-    void AdjustBackgrounds()
-    {
-        var zValue = rooms[0].transform.position.z;
-        rooms[0].transform.position = new Vector3(camX * xOffset, camY * yOffset, zValue);
-        rooms[1].transform.position = new Vector3(camX-1 * xOffset, camY * yOffset, zValue);
-        rooms[2].transform.position = new Vector3(camX * xOffset, camY+1 * yOffset, zValue);
-        rooms[3].transform.position = new Vector3(camX * xOffset, camY-1 * yOffset, zValue);
-        rooms[4].transform.position = new Vector3(camX+1 * xOffset, camY * yOffset, zValue);
     }
 
     private Direction GetPositionalRelationship(Vector3 obj1, Vector3 obj2)

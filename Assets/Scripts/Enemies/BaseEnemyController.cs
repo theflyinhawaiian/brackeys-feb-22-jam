@@ -1,6 +1,7 @@
+using Assets.Scripts.Enemies;
 using UnityEngine;
 
-public class BaseEnemyController : MonoBehaviour
+public class BaseEnemyController : MonoBehaviour, IEnemy
 {
     public float maxVelocity = 5;
     public float changeTargetInterval = 1.5f;
@@ -10,6 +11,12 @@ public class BaseEnemyController : MonoBehaviour
 
     private Vector3 target;
     private float lastTargetChangeTime;
+
+    public delegate void EnemyDeath();
+    public event EnemyDeath OnDeath;
+
+    private GameObject _prototype;
+    protected string prototypeResourceName = "Enemy";
 
     void Start()
     {
@@ -54,10 +61,11 @@ public class BaseEnemyController : MonoBehaviour
         }
     }
 
+    public GameObject GetPrototype()
+    {
+        if (_prototype == null)
+            _prototype = Resources.Load<GameObject>($"Prefabs/{prototypeResourceName}");
 
-
-
-
-
-
+        return _prototype;
+    }
 }
