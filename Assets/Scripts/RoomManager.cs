@@ -64,6 +64,8 @@ namespace Assets.Scripts
                 _generatedRooms.Add((newX, newY), roomConfig);
             }
 
+            ActiveRoom = roomConfig;
+
             if (roomConfig.Completed)
                 return;
 
@@ -73,11 +75,19 @@ namespace Assets.Scripts
                 var loadedY = (newY * yOffset) + enemy.YPosition - (yOffset / 2);
                 var obj = Object.Instantiate(enemy.Entity, new Vector3(loadedX, loadedY, Constants.EntityZValue), Quaternion.identity);
                 var mob = obj.GetComponent<IEnemy>();
-                mob.OnDeath += () => activeEnemies.Remove(obj);
+                mob.OnDeath += () =>
+                {
+                    activeEnemies.Remove(obj);
+                    UpdateRoomStatus();
+                };
                 activeEnemies.Add(obj);
             }
+        }
 
-            ActiveRoom = roomConfig;
+        private void UpdateRoomStatus()
+        {
+            if (activeEnemies.Count == 0)
+                ActiveRoom.Completed = true;
         }
 
         public void SetRoomComplete(int roomX, int roomY)

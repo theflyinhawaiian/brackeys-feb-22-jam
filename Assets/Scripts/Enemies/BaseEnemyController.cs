@@ -56,6 +56,8 @@ public class BaseEnemyController : MonoBehaviour, IEnemy
 
             if (EnemyHealth.GetHealth() == 0)
             {
+                if(OnDeath != null)
+                    OnDeath.Invoke();
                 Destroy(gameObject);
             }
         }
