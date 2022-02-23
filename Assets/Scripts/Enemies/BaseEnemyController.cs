@@ -5,40 +5,42 @@ using UnityEngine;
 public class BaseEnemyController : MonoBehaviour, IEnemy
 {
     public float maxVelocity = 0.05f;
-    public float changeTargetInterval = 1.5f;
-
-    private Rigidbody2D body;
-    private HealthSystem EnemyHealth;
-
-    private Vector3 target;
-    private float lastTargetChangeTime;
-    private bool needsTarget = true;
-
+    public int maxHealth = 5;
     public delegate void EnemyDeath();
     public event EnemyDeath OnDeath;
 
-    private GameObject _prototype;
+    protected HealthSystem EnemyHealth;
+    protected Rigidbody2D body;
     protected string prototypeResourceName = "Enemy";
+    protected Vector3 target;
+    protected bool needsTarget = true;
+
+    private GameObject _prototype;
+
+    private float changeTargetInterval = 1.5f;
+    private float lastTargetChangeTime;
 
     void Start()
     {
         body = GetComponent<Rigidbody2D>();
         body.isKinematic = true;
 
-        EnemyHealth = new HealthSystem(5);
+        EnemyHealth = new HealthSystem(maxHealth);
 
         lastTargetChangeTime = Time.time;
     }
 
     private void Update()
     {
-        if(needsTarget || Time.time - lastTargetChangeTime > changeTargetInterval)
+        if (CheckNeedsTarget())
         {
             target = GenerateNewTarget();
             lastTargetChangeTime = Time.time;
             needsTarget = false;
         }
     }
+
+    protected virtual bool CheckNeedsTarget() => needsTarget || Time.time - lastTargetChangeTime > changeTargetInterval;
 
     Vector3 GenerateNewTarget()
     {
@@ -54,7 +56,7 @@ public class BaseEnemyController : MonoBehaviour, IEnemy
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Bullet"))
+        if (collision.gameObject.CompareTag("PlayerBullet"))
         {
             EnemyHealth.Damage(1);
 

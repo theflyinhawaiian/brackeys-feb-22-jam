@@ -4,10 +4,19 @@ namespace Assets.Scripts.Weapons
 {
     class SimpleProjectileWeapon : BaseWeapon
     {
-        public SimpleProjectileWeapon()
+        private static GameObject _prefab;
+        private static GameObject prefab
         {
-            prefab = Resources.Load("Prefabs/Bullet") as GameObject;
+            get
+            {
+                if (_prefab == null)
+                    _prefab = Resources.Load<GameObject>("Prefabs/Bullet");
+
+                return _prefab;
+            }
         }
+
+        public SimpleProjectileWeapon() {}
 
         public override void Fire(Transform origin)
         {
@@ -17,6 +26,11 @@ namespace Assets.Scripts.Weapons
             lastUseTime = Time.time;
 
             GameObject p = Object.Instantiate(prefab, origin.position, origin.rotation);
+            p.tag = target == TargetType.Enemy ? "PlayerBullet" : "EnemyBullet";
+
+            var bullet = p.GetComponent<BulletDestroyer>();
+            bullet.originTag = target == TargetType.Enemy ? "Player" : "Enemy";
+
             Rigidbody2D body = p.GetComponent<Rigidbody2D>();
             body.AddForce(origin.up * bulletVelocity, ForceMode2D.Impulse);
         }

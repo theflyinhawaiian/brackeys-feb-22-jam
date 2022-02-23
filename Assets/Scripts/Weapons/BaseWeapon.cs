@@ -5,11 +5,12 @@ namespace Assets.Scripts.Weapons
 {
     public abstract class BaseWeapon : IItemWithCooldown
     {
-        public GameObject prefab;
         public float bulletVelocity = 20f;
 
         protected float cooldown = 0.25f;
         protected float lastUseTime = -1000;
+
+        protected TargetType target = TargetType.Enemy;
 
         public BaseWeapon() { }
 
