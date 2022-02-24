@@ -66,6 +66,7 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 0}
     - {fileID: 2651315434460729297, guid: 2458f7fc7e0d01144abbde4a2fb76e1f, type: 3}
+    - {fileID: 2651315434460729296, guid: 2458f7fc7e0d01144abbde4a2fb76e1f, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 2458f7fc7e0d01144abbde4a2fb76e1f, type: 3}
 --- !u!1 &2276379655258537949 stripped
 GameObject:
@@ -84,7 +85,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2d499bd76a623641876b30ab7ac839c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxVelocity: 0.05
+  maxVelocity: 2.5
   maxHealth: 5
   targetTransform: {fileID: 0}
   fireRate: 3
+  orbitRadius: 5
+  orbitBuffer: 0.05
+  rotationSpeed: 0.5

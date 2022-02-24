@@ -10,7 +10,7 @@ public class BaseEnemyController : MonoBehaviour, IEnemy
     public event EnemyDeath OnDeath;
 
     protected HealthSystem EnemyHealth;
-    protected Rigidbody2D body;
+
     protected string prototypeResourceName = "Enemy";
     protected Vector3 target;
     protected bool needsTarget = true;
@@ -22,9 +22,6 @@ public class BaseEnemyController : MonoBehaviour, IEnemy
 
     void Start()
     {
-        body = GetComponent<Rigidbody2D>();
-        body.isKinematic = true;
-
         EnemyHealth = new HealthSystem(maxHealth);
 
         lastTargetChangeTime = Time.time;
@@ -46,12 +43,12 @@ public class BaseEnemyController : MonoBehaviour, IEnemy
     {
         var rand = Random.insideUnitSphere.normalized * 5;
         rand.z = Constants.EntityZValue;
-        return rand.normalized;
+        return transform.position + rand;
     }
 
     void FixedUpdate()
     {
-        body.position += (Vector2)target.normalized * maxVelocity;
+        transform.position = target;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

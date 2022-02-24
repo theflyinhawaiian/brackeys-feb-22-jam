@@ -25,7 +25,7 @@ namespace Assets.Scripts.Weapons
 
             lastUseTime = Time.time;
 
-            GameObject p = Object.Instantiate(prefab, origin.position, origin.rotation);
+            GameObject p = Object.Instantiate(prefab, origin.position + (origin.up * 0.1f), origin.rotation);
             p.tag = target == TargetType.Enemy ? "PlayerBullet" : "EnemyBullet";
 
             var bullet = p.GetComponent<BulletDestroyer>();
@@ -33,6 +33,7 @@ namespace Assets.Scripts.Weapons
 
             Rigidbody2D body = p.GetComponent<Rigidbody2D>();
             body.AddForce(origin.up * bulletVelocity, ForceMode2D.Impulse);
+            Debug.Log($"Firing bullet with velocity: {body.velocity}");
         }
     }
 }
