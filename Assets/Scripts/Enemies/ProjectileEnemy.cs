@@ -22,6 +22,11 @@ public class ProjectileEnemy : BaseEnemyController
 
         equipmentSystem = new EquipmentSystem(transform);
         equipmentSystem.Weapons.Add(new ProjectileEnemyWeapon());
+
+        prototypeResourceName = "ProjectileEnemy";
+
+        if (targetTransform == null)
+            targetTransform = GameManager.GetPlayerTransform();
     }
 
     private void Update()

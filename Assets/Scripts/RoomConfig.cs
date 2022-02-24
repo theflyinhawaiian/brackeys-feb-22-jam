@@ -25,7 +25,14 @@ namespace Assets.Scripts
                     spawnPoint = new Vector3((Random.value) * effectiveXMax + margin, (Random.value * effectiveYMax) + margin, Constants.EntityZValue);
                 } while (Vector3.Distance(playerVector, spawnPoint) < 3);
 
-                room.Enemies.Add(new EnemyConfig { Entity = Resources.Load("Prefabs/Enemy", typeof(GameObject)) as GameObject, XPosition = spawnPoint.x, YPosition = spawnPoint.y });
+                var r = Random.value;
+                string enemyType;
+                if (r > 0.5)
+                    enemyType = "Enemy";
+                else
+                    enemyType = "ProjectileEnemy";
+
+                room.Enemies.Add(new EnemyConfig { Entity = Resources.Load($"Prefabs/{enemyType}", typeof(GameObject)) as GameObject, XPosition = spawnPoint.x, YPosition = spawnPoint.y });
             }
 
             return room;

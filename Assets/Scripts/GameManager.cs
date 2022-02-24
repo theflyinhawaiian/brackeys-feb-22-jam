@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour, ICameraMoveListener
     private float xOffset, yOffset;
     private int roomX, roomY;
 
+    static Transform playerTransform;
+
     void Start()
     {
         cameraManager.AddCameraMoveListener(this);
@@ -28,6 +30,8 @@ public class GameManager : MonoBehaviour, ICameraMoveListener
 
         roomX = 0;
         roomY = 0;
+
+        playerTransform = player.transform;
     }
 
     // Update is called once per frame
@@ -85,4 +89,6 @@ public class GameManager : MonoBehaviour, ICameraMoveListener
     public void OnCameraStartMoving() {}
 
     public void OnCameraStopMoving() {}
+
+    public static Transform GetPlayerTransform() => playerTransform;
 }
