@@ -16,7 +16,9 @@ namespace Assets.Scripts.Weapons
             }
         }
 
-        public SimpleProjectileWeapon() {}
+        public SimpleProjectileWeapon() {
+            lastUseTime = Time.time;
+        }
 
         public override void Fire(Transform origin)
         {
