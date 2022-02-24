@@ -41,14 +41,15 @@ public class BaseEnemyController : MonoBehaviour, IEnemy
 
     Vector3 GenerateNewTarget()
     {
-        var rand = Random.insideUnitSphere.normalized * 5;
+        var rand = transform.position + (Random.insideUnitSphere.normalized * 100);
         rand.z = Constants.EntityZValue;
-        return transform.position + rand;
+        return rand;
     }
 
     void FixedUpdate()
     {
-        transform.position = target;
+        var move = Vector3.MoveTowards(transform.position, target, Time.deltaTime * maxVelocity);
+        transform.position = move;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
