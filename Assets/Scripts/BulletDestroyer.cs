@@ -13,7 +13,6 @@ public class BulletDestroyer : MonoBehaviour
     private void Update()
     {
         var body = GetComponent<Rigidbody2D>();
-        Debug.Log($"My velocity is: {body.velocity}");
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -21,7 +20,6 @@ public class BulletDestroyer : MonoBehaviour
         if (collision.gameObject.tag == originTag)
             return;
 
-        Debug.Log("Bullet Dying!");
         Destroy(gameObject);
     }
 }

@@ -35,5 +35,16 @@
         health += healAmount;
     }
 
+    public void SetHealth(int amount)
+    {
+        if (amount > maxHealth)
+        {
+            health = maxHealth;
+            return;
+        }
 
+        health = amount;
+    }
+
+    public void SetMaxHealth(int amount) => maxHealth = amount;
 }

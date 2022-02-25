@@ -1,13 +1,19 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Enemies;
+using System;
 
 namespace Assets.Scripts
 {
+    [Serializable]
     public class EnemyConfig
     {
-        public GameObject Entity { get; set; }
+        public EnemyType Type;
 
-        public float XPosition { get; set; }
+        public int MaxHealth;
 
-        public float YPosition { get; set; }
+        public int CurrentHealth;
+
+        public float XPosition;
+
+        public float YPosition;
     }
 }

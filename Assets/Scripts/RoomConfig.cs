@@ -1,14 +1,16 @@
 ﻿using Assets.Scripts.Enemies;
 using System.Collections.Generic;
 using UnityEngine;
+using Serializable = System.SerializableAttribute;
 
 namespace Assets.Scripts
 {
+    [Serializable]
     public class RoomConfig
     {
-        public List<EnemyConfig> Enemies { get; set; } = new List<EnemyConfig>();
+        public List<EnemyConfig> Enemies = new List<EnemyConfig>();
 
-        public bool Completed { get; set; }
+        public bool Completed;
 
         public static RoomConfig CreateRandomRoom(float playerX, float playerY, float xMax, float yMax, float margin)
         {
@@ -25,17 +27,25 @@ namespace Assets.Scripts
                     spawnPoint = new Vector3((Random.value) * effectiveXMax + margin, (Random.value * effectiveYMax) + margin, Constants.EntityZValue);
                 } while (Vector3.Distance(playerVector, spawnPoint) < 3);
 
-                var r = Random.value;
-                string enemyType;
-                if (r > 0.5)
-                    enemyType = "Enemy";
-                else
-                    enemyType = "ProjectileEnemy";
-
-                room.Enemies.Add(new EnemyConfig { Entity = Resources.Load($"Prefabs/{enemyType}", typeof(GameObject)) as GameObject, XPosition = spawnPoint.x, YPosition = spawnPoint.y });
+                room.Enemies.Add(
+                    new EnemyConfig {
+                        Type = Random.value > 0.5
+                                        ? EnemyType.Basic
+                                        : EnemyType.Projectile,
+                        MaxHealth = 5,
+                        CurrentHealth = 5,
+                        XPosition = spawnPoint.x,
+                        YPosition = spawnPoint.y
+                    });
             }
 
             return room;
+        }
+
+        public static RoomConfig GetRoomFromFile(string fileName)
+        {
+            var file = Resources.Load<TextAsset>(fileName);
+            return JsonUtility.FromJson<RoomConfig>(file.text);
         }
     }
 }

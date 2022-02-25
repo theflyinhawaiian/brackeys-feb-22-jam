@@ -4,26 +4,27 @@ using UnityEngine;
 
 public class BaseEnemyController : MonoBehaviour, IEnemy
 {
-    public float maxVelocity = 0.05f;
-    public int maxHealth = 5;
     public delegate void EnemyDeath();
     public event EnemyDeath OnDeath;
 
-    protected HealthSystem EnemyHealth;
+    protected HealthSystem health;
+    public EnemyType Type { get; set; } = EnemyType.Basic;
 
-    protected string prototypeResourceName = "Enemy";
+    public float maxVelocity = 0.05f;
+    public int startingHealth = 5;
+
     protected Vector3 target;
     protected bool needsTarget = true;
 
-    private GameObject _prototype;
-
     private float changeTargetInterval = 1.5f;
     private float lastTargetChangeTime;
+    
+    public int MaxHealth => health.GetMaxHealth();
+
+    public int CurrentHealth => health.GetHealth();
 
     void Start()
     {
-        EnemyHealth = new HealthSystem(maxHealth);
-
         lastTargetChangeTime = Time.time;
     }
 
@@ -56,9 +57,9 @@ public class BaseEnemyController : MonoBehaviour, IEnemy
     {
         if (collision.gameObject.CompareTag("PlayerBullet"))
         {
-            EnemyHealth.Damage(1);
+            health.Damage(1);
 
-            if (EnemyHealth.GetHealth() == 0)
+            if (health.GetHealth() == 0)
             {
                 if(OnDeath != null)
                     OnDeath.Invoke();
@@ -67,11 +68,9 @@ public class BaseEnemyController : MonoBehaviour, IEnemy
         }
     }
 
-    public GameObject GetPrototype()
+    public void Configure(int currentHealth, int maxHealth)
     {
-        if (_prototype == null)
-            _prototype = Resources.Load<GameObject>($"Prefabs/{prototypeResourceName}");
-
-        return _prototype;
+        health = new HealthSystem(maxHealth);
+        health.SetHealth(currentHealth);
     }
 }

@@ -1,11 +1,13 @@
 using Assets.Scripts;
 using Assets.Scripts.Weapons;
+using Assets.Scripts.Enemies;
 using UnityEngine;
 
 public class ProjectileEnemy : BaseEnemyController
 {
     public Transform targetTransform;
     public float fireRate = 3f;
+    public int maxHealth = 5;
 
     public float orbitRadius = 5f;
     public float orbitBuffer = 0.05f;
@@ -14,16 +16,15 @@ public class ProjectileEnemy : BaseEnemyController
 
     private EquipmentSystem equipmentSystem;
 
-    private bool shouldOrbit = false;
-
     void Start()
     {
-        EnemyHealth = new HealthSystem(maxHealth);
+        if(health == null)
+            health = new HealthSystem(maxHealth);
 
         equipmentSystem = new EquipmentSystem(transform);
         equipmentSystem.Weapons.Add(new ProjectileEnemyWeapon());
 
-        prototypeResourceName = "ProjectileEnemy";
+        Type = EnemyType.Projectile;
 
         if (targetTransform == null)
             targetTransform = GameManager.GetPlayerTransform();

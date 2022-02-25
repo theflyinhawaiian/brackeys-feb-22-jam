@@ -44,7 +44,15 @@ namespace Assets.Scripts
                     if (savedY < 0)
                         savedY = yOffset + savedY;
 
-                    ActiveRoom.Enemies.Add(new EnemyConfig { Entity = enemy.GetPrototype(), XPosition = savedX, YPosition = savedY });
+                    ActiveRoom.Enemies.Add(
+                        new EnemyConfig { 
+                            Type = enemy.Type, 
+                            MaxHealth = enemy.MaxHealth,
+                            CurrentHealth = enemy.CurrentHealth, 
+                            XPosition = savedX, 
+                            YPosition = savedY 
+                        });
+
                     Object.Destroy(obj);
                 }
 
@@ -73,8 +81,11 @@ namespace Assets.Scripts
             {
                 var loadedX = (newX * xOffset) + enemy.XPosition - (xOffset / 2);
                 var loadedY = (newY * yOffset) + enemy.YPosition - (yOffset / 2);
-                var obj = Object.Instantiate(enemy.Entity, new Vector3(loadedX, loadedY, Constants.EntityZValue), Quaternion.identity);
+                var obj = Object.Instantiate(ResourceManager.EnemyPrefabs[enemy.Type], new Vector3(loadedX, loadedY, Constants.EntityZValue), Quaternion.identity);
                 var mob = obj.GetComponent<IEnemy>();
+
+                mob.Configure(enemy.CurrentHealth, enemy.MaxHealth);
+
                 mob.OnDeath += () =>
                 {
                     activeEnemies.Remove(obj);

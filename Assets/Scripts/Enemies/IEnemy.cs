@@ -6,6 +6,12 @@ namespace Assets.Scripts.Enemies
     {
         event BaseEnemyController.EnemyDeath OnDeath;
 
-        GameObject GetPrototype();
+        public int MaxHealth { get; }
+
+        public int CurrentHealth { get; }
+
+        void Configure(int currentHealth, int maxHealth);
+
+        EnemyType Type { get; set; }
     }
 }

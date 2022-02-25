@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour, ICameraMoveListener
 
     void Start()
     {
+        ResourceManager.Load();
+
         cameraManager.AddCameraMoveListener(this);
 
         xOffset = rooms[0].transform.localScale.x;
